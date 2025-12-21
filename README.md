@@ -60,12 +60,12 @@ The fully connected CNN (`fcnn_10`) solves the task almost instantly, reaching *
 Both transformer models (`transformer_10`, `hybrid_10`) also reach **100% accuracy by epochs 4–5**, thanks to positional embeddings and global attention.
 
 In contrast, the simple CNN with global average pooling (`cnn_10`) reaches only **28%** in 10 epochs and only **~94%** after 50 epochs.  
-Because global pooling removes most spatial information, it must rely on weak boundary artifacts to infer position—making learning slow and incomplete.
+Because global pooling removes most spatial information, it must rely on weak boundary artifacts to infer position - making learning slow and incomplete.
 
 ## Runtimes
 
 CNNs are fastest at both training and inference: convolutions and fully connected layers have highly optimized kernels and minimal overhead.  
-Transformers are slower because multi-head attention, layer norms, and QKV projections introduce significant fixed overhead—especially for batch size 1.
+Transformers are slower because multi-head attention, layer norms, and $QKV$ projections introduce significant fixed overhead - especially for batch size 1.
 
 The hybrid model is the slowest per sample, combining both CNN and transformer costs. It becomes beneficial only at larger image sizes (where sequence length dominates).
 
