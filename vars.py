@@ -5,8 +5,10 @@ import numpy as np
 
 
 SEED = 42
-IMG_SIZE = 16
+IMG_SIZE = 32
+NUM_PIXELS = 2
 NUM_CORNERS = 4
+MARGIN = 2  # how far from the border we place the top-left of the block
 NUM_CLASSES = 2**NUM_CORNERS - 1  # all non-empty subsets of 4 corners -> 15
 
 TRAIN_SAMPLES = 4000

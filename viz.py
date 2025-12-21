@@ -1,10 +1,35 @@
+import math
 from typing import Dict
 
 import matplotlib.pyplot as plt
 import torch
 
-from vars import FIGS_DIR, DEVICE
+from vars import DEVICE
 from data import CornerSubsetDataset
+
+
+def visualize_dataset_samples(dataset, num_samples: int, out_path: str):
+    num_samples = min(num_samples, len(dataset))
+
+    # layout
+    num_cols = max(1, num_samples // 4)  # avoid 0 columns
+    num_rows = math.ceil(num_samples / num_cols)
+
+    indices = torch.randint(0, len(dataset), (num_samples,)).tolist()
+
+    plt.figure(figsize=(3 * num_cols, 3 * num_rows))
+
+    for i, idx in enumerate(indices):
+        img, label = dataset[idx]
+        img_np = img.squeeze(0).numpy()
+
+        ax = plt.subplot(num_rows, num_cols, i + 1)
+        ax.imshow(img_np, cmap="gray", vmin=0, vmax=1)
+        ax.set_title(f"label={label}")
+        ax.axis("off")
+    plt.tight_layout()
+    plt.savefig(out_path, dpi=200)
+    plt.close()
 
 
 def plot_losses_accs(histories: Dict[str, dict], out_path: str):

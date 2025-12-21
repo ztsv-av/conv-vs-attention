@@ -9,7 +9,7 @@ from vars import (
 from data import get_datasets_and_loaders
 from models import SimpleCNNGAP, SimpleCNNFC, SimpleTransformerClassifier, HybridConvTransformer
 from train import run_experiment
-from viz import plot_losses_accs, plot_sample_predictions, plot_runtimes
+from viz import visualize_dataset_samples, plot_losses_accs, plot_sample_predictions, plot_runtimes
 
 
 def build_model(model_type: str):
@@ -29,6 +29,10 @@ def main():
 
     # data
     train_ds, test_ds, train_loader, test_loader = get_datasets_and_loaders()
+
+    # visualize data
+    data_viz_path = os.path.join(FIGS_DIR, "data.png")
+    visualize_dataset_samples(dataset=train_ds, num_samples=16, out_path=data_viz_path)
 
     histories = {}
     trained_models = {}

@@ -27,10 +27,10 @@ We use binary images with up to four "corner dots":
 
 The label is essentially a 4-bit mask indicating which corners are active.
 
-The default image size is 16x16 (`IMG_SIZE` in `vars.py`), but you can increase it (e.g. $32\times32$) to see how training and inference times scale. The hybrid model with a convolutional stem is particularly useful at larger resolutions.
+The default image size is $32\times32$ (`IMG_SIZE` in `vars.py`), but you can decrease/increase it to see how training and inference times scale. The hybrid model with a convolutional stem is particularly useful at larger resolutions.
 
 <p align="center">
-  <img src="figs/predictions.png" width="800">
+  <img src="figs/data.png" width="800">
 </p>
 
 ## Models
@@ -38,33 +38,38 @@ The default image size is 16x16 (`IMG_SIZE` in `vars.py`), but you can increase 
 We train five configurations:
 
 1. `cnn_10` – `SimpleCNNGAP`  
-   Simple CNN with global average pooling, 10 epochs. $\text{Conv} \to \text{ReLU} \to \text{Conv} \to \text{ReLU} \to \text{GlobalAvgPool} \to \text{Linear}$ destroys almost all spatial information.
+   Simple CNN with global average pooling: $\text{Conv} \to \text{ReLU} \to \text{Conv} \to \text{ReLU} \to \text{GlobalAvgPool} \to \text{Linear}$. Destroys almost all spatial information. Achieves poor results, $26%$ accuracy, with $10$ epochs.
 
 2. `cnn_50` – `SimpleCNNGAP`  
-   Same architecture, 50 epochs. Eventually reaches $\approx 92%$ (not $100%$ !) accuracy by exploiting boundary artifacts and subtle positional cues.
+   Same architecture, 50 epochs. Eventually reaches $\approx 55%$ accuracy by exploiting boundary artifacts and subtle positional cues.
 
 3. `fcnn_10` – `SimpleCNNFC`  
-   CNN with a fully connected head that sees all spatial positions. Has explicit access to absolute location, so it converges very quickly.
+   CNN with a fully connected head that sees all spatial positions. Has explicit access to absolute location, so it converges very quickly, in just $2$ epochs.
 
 4. `transformer_10` – `SimpleTransformerClassifier`  
-   Transformer encoder on flattened pixels with learned positional embeddings.
+   Transformer encoder on flattened pixels with learned positional embeddings. Achieves perfect score in $4$ epochs.
 
 5. `hybrid_10` – `HybridConvTransformer`  
-   Convolutional stem (stride-2 downsamples, reducing resolution by 4x) followed by a transformer encoder on patch tokens. This is closer to typical hybrid vision backbones and scales better to larger images than a pure transformer on raw pixels.
+   Convolutional stem (stride-2 downsamples, reducing resolution by 4x) followed by a transformer encoder on patch tokens. This is closer to typical hybrid vision backbones and scales better to larger images than a pure transformer on raw pixels. Achieves perfect score in $4$ epochs.
 
 All hyperparameters are defined in `vars.py`.
 
 ## Results
 
-The fully connected CNN (`fcnn_10`) solves the task almost instantly, reaching **100% accuracy by epoch 2** because it has direct access to absolute pixel locations.  
-Both transformer models (`transformer_10`, `hybrid_10`) also reach **100% accuracy by epochs 4–5**, thanks to positional embeddings and global attention.
+The fully connected CNN (`fcnn_10`) solves the task almost instantly, reaching **100% accuracy by epoch 2** because it has direct access to absolute pixel locations.
 
-In contrast, the simple CNN with global average pooling (`cnn_10`) reaches only **28%** in 10 epochs and only **~94%** after 50 epochs.  
-Because global pooling removes most spatial information, it must rely on weak boundary artifacts to infer position - making learning slow and incomplete.
+Both transformer models (`transformer_10`, `hybrid_10`) also reach **100% accuracy by epochs 4**, thanks to positional embeddings and global attention.
+
+In contrast, the simple CNN with global average pooling (`cnn_10`) reaches only **26%** in 10 epochs and only **~55%** after 50 epochs. Because global pooling removes most spatial information, it must rely on weak boundary artifacts to infer position - making learning slow and incomplete.
+
+<p align="center">
+  <img src="figs/predictions.png" width="800">
+</p>
 
 ## Runtimes
 
-CNNs are fastest at both training and inference: convolutions and fully connected layers have highly optimized kernels and minimal overhead.  
+CNNs are fastest at both training and inference: convolutions and fully connected layers have highly optimized kernels and minimal overhead.
+
 Transformers are slower because multi-head attention, layer norms, and $QKV$ projections introduce significant fixed overhead - especially for batch size 1.
 
 The hybrid model is the slowest per sample, combining both CNN and transformer costs. It becomes beneficial only at larger image sizes (where sequence length dominates).

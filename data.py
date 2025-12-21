@@ -1,34 +1,31 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
 
-from vars import IMG_SIZE, NUM_CORNERS, NUM_CLASSES, TRAIN_SAMPLES, TEST_SAMPLES, BATCH_SIZE
+from vars import MARGIN, NUM_PIXELS, IMG_SIZE, NUM_CORNERS, NUM_CLASSES, TRAIN_SAMPLES, TEST_SAMPLES, BATCH_SIZE
 
-# corner positions (row, col)
+if NUM_PIXELS >= IMG_SIZE:
+    raise ValueError(f"NUM_PIXELS={NUM_PIXELS} must be < IMG_SIZE={IMG_SIZE}")
+
+max_start = IMG_SIZE - NUM_PIXELS - MARGIN  # last valid top-left index
+
 CORNERS = {
-    0: (2, 2),  # top-left
-    1: (2, IMG_SIZE - 3),  # top-right
-    2: (IMG_SIZE - 3, 2),  # bottom-left
-    3: (IMG_SIZE - 3, IMG_SIZE - 3),  # bottom-right
+    0: (MARGIN, MARGIN),  # top-left
+    1: (MARGIN, max_start),  # top-right
+    2: (max_start, MARGIN),  # bottom-left
+    3: (max_start, max_start),  # bottom-right
 }
 
 
 def generate_sample():
-    """
-    Returns:
-        img: FloatTensor (1, H, W), white (0) with 1..4 pixels set to 1 at corners.
-        label: int in [0..NUM_CLASSES-1], representing a non-empty subset of corners as a bitmask.
-               Internal mask is in [1..2^4-1], label = mask - 1.
-    """
-    # pick a non-empty subset of corners (bitmask in [1, 15])
-    mask = torch.randint(1, NUM_CLASSES + 1, (1,)).item()  # 1..15
+    mask = torch.randint(1, NUM_CLASSES + 1, (1,)).item()
     img = torch.zeros(1, IMG_SIZE, IMG_SIZE, dtype=torch.float32)
 
     for corner_idx in range(NUM_CORNERS):
         if (mask >> corner_idx) & 1:
             r, c = CORNERS[corner_idx]
-            img[0, r, c] = 1.0
+            img[0, r : r + NUM_PIXELS, c : c + NUM_PIXELS] = 1.0
 
-    label = mask - 1  # shift to 0..14
+    label = mask - 1
     return img, label
 
 
