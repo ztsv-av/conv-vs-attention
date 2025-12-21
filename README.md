@@ -1,6 +1,8 @@
 <p align="center">
-  <img src="figs/losses_accs.png" width="800">
+  <img src="figs/attention_vs_convolution.png" width="800">
 </p>
+
+Image taken from Julia Turc's video: https://www.youtube.com/watch?v=KnCRTP11p5U
 
 # CNNs vs Transformers on Synthetic Corner Patterns
 
@@ -63,7 +65,7 @@ Both transformer models (`transformer_10`, `hybrid_10`) also reach **100% accura
 In contrast, the simple CNN with global average pooling (`cnn_10`) reaches only **26%** in 10 epochs and only **~55%** after 50 epochs. Because global pooling removes most spatial information, it must rely on weak boundary artifacts to infer position - making learning slow and incomplete.
 
 <p align="center">
-  <img src="figs/predictions.png" width="800">
+  <img src="figs/losses_accs.png" width="800">
 </p>
 
 ## Runtimes
