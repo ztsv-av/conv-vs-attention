@@ -68,11 +68,11 @@ In contrast, the simple CNN with global average pooling (`cnn_10`) reaches only 
 
 ## Runtimes
 
-CNNs are fastest at both training and inference: convolutions and fully connected layers have highly optimized kernels and minimal overhead.
+As the image size increases, the runtime differences become much more pronounced. CNNs remain the fastest in both training and inference because their computation scales linearly with image area and relies on highly optimized convolution kernels.
 
-Transformers are slower because multi-head attention, layer norms, and $QKV$ projections introduce significant fixed overhead - especially for batch size 1.
+Transformers slow down significantly: the sequence length grows with the number of pixels, and attention has a quadratic component. Operations like multi-head attention, layer norms, and $QKV$ projections dominate runtime, especially with small batch sizes.
 
-The hybrid model is the slowest per sample, combining both CNN and transformer costs. It becomes beneficial only at larger image sizes (where sequence length dominates).
+The hybrid Conv $\to$ Transformer model sits between the two. The convolutional stem reduces spatial resolution early, making it more efficient than a pure transformer at larger image sizes, but it still carries transformer overhead. So, inference remains slower than CNNs.
 
 <p align="center">
   <img src="figs/runtimes.png" width="800">
