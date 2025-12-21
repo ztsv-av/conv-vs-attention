@@ -29,6 +29,10 @@ The label is essentially a 4-bit mask indicating which corners are active.
 
 The default image size is 16x16 (`IMG_SIZE` in `vars.py`), but you can increase it (e.g. $32\times32$) to see how training and inference times scale. The hybrid model with a convolutional stem is particularly useful at larger resolutions.
 
+<p align="center">
+  <img src="figs/predictions.png" width="800">
+</p>
+
 ## Models
 
 We train five configurations:
@@ -57,10 +61,6 @@ Both transformer models (`transformer_10`, `hybrid_10`) also reach **100% accura
 
 In contrast, the simple CNN with global average pooling (`cnn_10`) reaches only **28%** in 10 epochs and only **~94%** after 50 epochs.  
 Because global pooling removes most spatial information, it must rely on weak boundary artifacts to infer position—making learning slow and incomplete.
-
-<p align="center">
-  <img src="figs/predictions.png" width="800">
-</p>
 
 ## Runtimes
 
