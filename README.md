@@ -2,7 +2,7 @@
   <img src="figs/attention_vs_convolution.png" width="800">
 </p>
 
-Image taken from Julia Turc's video: https://www.youtube.com/watch?v=KnCRTP11p5U
+_Image taken from Julia Turc's video: https://www.youtube.com/watch?v=KnCRTP11p5U_
 
 # CNNs vs Transformers on Synthetic Corner Patterns
 
