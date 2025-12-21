@@ -38,13 +38,13 @@ The default image size is $32\times32$ (`IMG_SIZE` in `vars.py`), but you can de
 We train five configurations:
 
 1. `cnn_10` – `SimpleCNNGAP`  
-   Simple CNN with global average pooling: $\text{Conv} \to \text{ReLU} \to \text{Conv} \to \text{ReLU} \to \text{GlobalAvgPool} \to \text{Linear}$. Destroys almost all spatial information. Achieves poor results, $26%$ accuracy, with $10$ epochs.
+   Simple CNN with global average pooling after convolutions: $\text{Conv} \to \text{ReLU} \to \text{Conv} \to \text{ReLU} \to \text{GlobalAvgPool} \to \text{Linear}$. In theory, global average pooling collapses the entire spatial map into a single vector of channel averages. Achieves poor results, $26%$ accuracy, with $10$ epochs.
 
 2. `cnn_50` – `SimpleCNNGAP`  
    Same architecture, 50 epochs. Eventually reaches $\approx 55%$ accuracy by exploiting boundary artifacts and subtle positional cues.
 
 3. `fcnn_10` – `SimpleCNNFC`  
-   CNN with a fully connected head that sees all spatial positions. Has explicit access to absolute location, so it converges very quickly, in just $2$ epochs.
+   CNN with a fully connected head that sees all spatial positions. Keeps the full spatial map from the last conv layer and then flattens it. Every pixel location gets its own dedicated weight in the fully connected layer, so it converges very quickly, in just $2$ epochs.
 
 4. `transformer_10` – `SimpleTransformerClassifier`  
    Transformer encoder on flattened pixels with learned positional embeddings. Achieves perfect score in $4$ epochs.
