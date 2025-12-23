@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
 
-from vars import MARGIN, NUM_PIXELS, IMG_SIZE, NUM_CORNERS, NUM_CLASSES, TRAIN_SAMPLES, TEST_SAMPLES, BATCH_SIZE
+from config.vars import MARGIN, NUM_PIXELS, IMG_SIZE, NUM_CORNERS, NUM_CLASSES, TRAIN_SAMPLES, TEST_SAMPLES, BATCH_SIZE
 
 if NUM_PIXELS >= IMG_SIZE:
     raise ValueError(f"NUM_PIXELS={NUM_PIXELS} must be < IMG_SIZE={IMG_SIZE}")

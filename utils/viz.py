@@ -4,8 +4,8 @@ from typing import Dict
 import matplotlib.pyplot as plt
 import torch
 
-from vars import DEVICE
-from data import CornerSubsetDataset
+from config.vars import DEVICE
+from data.data import CornerSubsetDataset
 
 
 def visualize_dataset_samples(dataset, num_samples: int, out_path: str):

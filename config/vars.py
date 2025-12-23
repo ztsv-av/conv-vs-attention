@@ -5,7 +5,7 @@ import numpy as np
 
 
 SEED = 42
-IMG_SIZE = 32
+IMG_SIZE = 16
 NUM_PIXELS = 2
 NUM_CORNERS = 4
 MARGIN = 2  # how far from the border we place the top-left of the block
@@ -19,7 +19,8 @@ LR = 1e-3
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(CONFIG_DIR)
 WEIGHTS_DIR = os.path.join(ROOT_DIR, "weights")
 FIGS_DIR = os.path.join(ROOT_DIR, "figs")
 

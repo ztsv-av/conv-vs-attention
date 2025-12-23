@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from vars import IMG_SIZE, NUM_CLASSES
+from config.vars import IMG_SIZE, NUM_CLASSES
 
 
 class SimpleCNNGAP(nn.Module):

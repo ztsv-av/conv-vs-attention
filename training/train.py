@@ -5,7 +5,7 @@ from typing import Dict, Any
 import torch
 import torch.nn.functional as F
 
-from vars import DEVICE, LR, WEIGHTS_DIR
+from config.vars import DEVICE, LR, WEIGHTS_DIR
 
 
 def train_one_epoch(model, loader, optimizer, device):
@@ -16,7 +16,7 @@ def train_one_epoch(model, loader, optimizer, device):
 
     for imgs, labels in loader:
         imgs = imgs.to(device)
-        labels = torch.tensor(labels, device=device)
+        labels = labels.to(device)
 
         optimizer.zero_grad()
         logits = model(imgs)
@@ -43,7 +43,7 @@ def evaluate(model, loader, device):
     with torch.no_grad():
         for imgs, labels in loader:
             imgs = imgs.to(device)
-            labels = torch.tensor(labels, device=device)
+            labels = labels.to(device)
 
             logits = model(imgs)
             loss = F.cross_entropy(logits, labels)

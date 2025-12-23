@@ -10,6 +10,14 @@ This repo contains a small, fully reproducible experiment comparing different vi
 
 ## Running
 
+Clone the repo and install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Then run the main experiment:
+
 ```bash
 python main.py
 ```

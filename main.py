@@ -1,15 +1,18 @@
 import os
+import warnings
 
-from vars import (
+warnings.filterwarnings("ignore", category=FutureWarning)
+
+from config.vars import (
     set_seed,
     DEVICE,
     EXPERIMENTS,
     FIGS_DIR,
 )
-from data import get_datasets_and_loaders
-from models import SimpleCNNGAP, SimpleCNNFC, SimpleTransformerClassifier, HybridConvTransformer
-from train import run_experiment
-from viz import visualize_dataset_samples, plot_losses_accs, plot_sample_predictions, plot_runtimes
+from data.data import get_datasets_and_loaders
+from models.models import SimpleCNNGAP, SimpleCNNFC, SimpleTransformerClassifier, HybridConvTransformer
+from training.train import run_experiment
+from utils.viz import visualize_dataset_samples, plot_losses_accs, plot_sample_predictions, plot_runtimes
 
 
 def build_model(model_type: str):
